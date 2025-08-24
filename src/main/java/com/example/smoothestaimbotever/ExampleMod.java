@@ -26,17 +26,20 @@ public class ExampleMod implements ClientModInitializer {
 
         new Thread(() -> {
             while (true) {
-                ClientPlayerEntity player = client.player;
-                if (player != null) {
-                    movePlayer(player);
-                    targetPlayer(player, client);
-                }
                 try {
+                    ClientPlayerEntity player = client.player;
+                    if (player != null && client.world != null) { // <<< check world is loaded
+                        movePlayer(player);
+                        targetPlayer(player, client);
+                    }
                     Thread.sleep(SLEEP_MS);
-                } catch (InterruptedException ignored) {}
+                } catch (Exception ignored) {
+                    // suppress all exceptions to prevent crashing
+                }
             }
         }).start();
     }
+
 
     private void movePlayer(ClientPlayerEntity player) {
         Vec3d motion = player.getRotationVector()
