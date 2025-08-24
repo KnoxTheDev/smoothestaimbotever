@@ -3,7 +3,7 @@
 	"package": "com.example.smoothestaimbotever.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-		"ExampleMixin"
+		"SetRotationMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
