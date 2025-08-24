@@ -10,7 +10,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.Vec3d;
 import com.example.smoothestaimbotever.mixin.EntityAccessorMixin;
 
-import java.util.*;
+import java.util.stream.*;
+import java.lang.Iterable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -130,7 +131,8 @@ public class ExampleMod implements ClientModInitializer {
     }
 
     private void aimAtTarget(ClientPlayerEntity player) {
-        List<Entity> entities = client.world.getEntities().stream()
+        Iterable<Entity> entityIterable = client.world.getEntities();
+        List<Entity> entities = StreamSupport.stream(entityIterable.spliterator(), false)
                 .filter(e -> e != player)
                 .filter(this::isTargetValid)
                 .filter(this::hasLineOfSight)
