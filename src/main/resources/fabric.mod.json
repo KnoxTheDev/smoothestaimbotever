@@ -1,38 +1,43 @@
 {
-	"schemaVersion": 1,
-	"id": "modid",
-	"version": "${version}",
-	"name": "Example mod",
-	"description": "This is an example description! Tell everyone what your mod is about!",
-	"authors": [
-		"Me!"
-	],
-	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
-	},
-	"license": "LGPL-2.1",
-	"icon": "assets/modid/icon.png",
-	"environment": "*",
-	"entrypoints": {
-		"main": [
-			"com.example.ExampleMod"
-		]
-	},
-	"mixins": [
-		"modid.mixins.json",
-		{
-			"config": "modid.client.mixins.json",
-			"environment": "client"
-		}
-	],
-	"depends": {
-		"fabricloader": ">=0.16.14",
-		"minecraft": "~1.21.8",
-		"java": ">=21",
-		"fabric-api": "*"
-	},
-	"suggests": {
-		"another-mod": "*"
-	}
+  "schemaVersion": 1,
+  "id": "modid",
+  "version": "${version}",
+  "name": "Example Mod",
+  "description": "smoothest aimbot ever for block game",
+  "authors": [
+    "knox"
+  ],
+  "contact": {
+    "sources": "https://github.com/KnoxTheDev/smoothestaimbotever"
+  },
+  "license": "LGPL-2.1",
+  "icon": "assets/modid/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.example.ExampleMod"
+    ]
+  },
+  "mixins": [
+    "modid.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.14",
+    "minecraft": "*",
+    "java": ">=21",
+    "fabric-api": "*"
+  },
+  "features": {
+    "playerMovement": {
+      "type": "microStep",
+      "speed": 0.7,
+      "stepSize": 0.05,
+      "jitter": 0.002
+    },
+    "targeting": {
+      "type": "microLock",
+      "aimSpeed": 0.03,
+      "targetEntity": "player"
+    }
+  }
 }
