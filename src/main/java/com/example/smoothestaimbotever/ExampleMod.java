@@ -25,6 +25,8 @@ public class ExampleMod implements ClientModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger("smoothestaimbotever");
     private final MinecraftClient client = MinecraftClient.getInstance();
 
+    private boolean enabled = false; // Aimbot toggle
+
     // Hyper-optimized aimbot config
     private static class AimbotConfig {
         public String targets = "player"; // player/crystals
@@ -41,7 +43,6 @@ public class ExampleMod implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         LOGGER.info("smoothest aimbot ever for block game initialised.");
-        
 
         // Register /aimbot commands
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
@@ -55,6 +56,19 @@ public class ExampleMod implements ClientModInitializer {
                         listConfig();
                         return 1;
                     }))
+                .then(ClientCommandManager.literal("on")
+                    .executes(context -> {
+                        enabled = true;
+                        LOGGER.info("Aimbot enabled.");
+                        return 1;
+                    }))
+                .then(ClientCommandManager.literal("off")
+                    .executes(context -> {
+                        enabled = false;
+                        LOGGER.info("Aimbot disabled.");
+                        return 1;
+                    }))
+                // Existing config commands
                 .then(ClientCommandManager.literal("targets")
                     .then(ClientCommandManager.argument("value", StringArgumentType.word())
                         .executes(context -> {
@@ -118,7 +132,7 @@ public class ExampleMod implements ClientModInitializer {
             while (true) {
                 try {
                     ClientPlayerEntity player = client.player;
-                    if (player != null && client.world != null) {
+                    if (enabled && player != null && client.world != null) {
                         aimAtTarget(player);
                     }
                     Thread.sleep(5);
@@ -128,8 +142,9 @@ public class ExampleMod implements ClientModInitializer {
     }
 
     private void listConfig() {
-        LOGGER.info("Aimbot Config: targets=" + config.targets + " mode=" + config.mode + " visibleTime=" + config.visibleTime +
-            " smoothing=" + config.smoothing + " fov=" + config.fov + " range=" + config.range + " random=" + config.random + " hitbox=" + config.hitbox);
+        LOGGER.info("Aimbot Config: enabled=" + enabled + " targets=" + config.targets + " mode=" + config.mode +
+            " visibleTime=" + config.visibleTime + " smoothing=" + config.smoothing + " fov=" + config.fov +
+            " range=" + config.range + " random=" + config.random + " hitbox=" + config.hitbox);
     }
 
     private void aimAtTarget(ClientPlayerEntity player) {
