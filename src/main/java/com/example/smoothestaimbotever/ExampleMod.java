@@ -9,61 +9,61 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ExampleMod implements ClientModInitializer {
-    public static final String MOD_ID = "modid";
+    public static final String MOD_ID = "smoothestaimbotever";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-    
-    private static final double SPEED = 0.7; // high speed
-    private static final double STEP_SIZE = 0.05; // tiny smooth steps
-    private static final double JITTER = 0.002; // slight jitter for micro aiming
-    private static final double AIM_SPEED = 0.03; // micro aim adjustment per tick
+
+    private static final double SPEED = 0.7;
+    private static final double STEP_SIZE = 0.05;
+    private static final double JITTER = 0.0015; // smaller jitter for smoother aim
+    private static final double AIM_SPEED = 0.045; // faster smooth aim per tick
+    private static final long SLEEP_MS = 5; // faster update rate
 
     @Override
     public void onInitializeClient() {
-        LOGGER.info("Advanced player movement with micro-lock targeting for players enabled.");
+        LOGGER.info("Hyper-optimized smooth micro-lock aimbot enabled.");
         MinecraftClient client = MinecraftClient.getInstance();
 
         new Thread(() -> {
             while (true) {
-                if (client.player != null) {
-                    movePlayer(client.player);
-                    targetPlayer(client.player, client);
+                ClientPlayerEntity player = client.player;
+                if (player != null) {
+                    movePlayer(player);
+                    targetPlayer(player, client);
                 }
                 try {
-                    Thread.sleep(10); // control update rate
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                    Thread.sleep(SLEEP_MS);
+                } catch (InterruptedException ignored) {}
             }
         }).start();
     }
 
     private void movePlayer(ClientPlayerEntity player) {
-        Vec3d forward = player.getRotationVector().multiply(SPEED * STEP_SIZE);
-        double jitterX = (Math.random() - 0.5) * JITTER;
-        double jitterZ = (Math.random() - 0.5) * JITTER;
-        Vec3d motion = forward.add(jitterX, 0, jitterZ);
-
+        Vec3d motion = player.getRotationVector()
+                .multiply(SPEED * STEP_SIZE)
+                .add((Math.random() - 0.5) * JITTER, 0, (Math.random() - 0.5) * JITTER);
         player.setVelocity(player.getVelocity().add(motion));
         player.velocityModified = true;
     }
 
     private void targetPlayer(ClientPlayerEntity player, MinecraftClient client) {
-        PlayerEntity closestPlayer = client.world.getPlayers().stream()
+        PlayerEntity target = client.world.getPlayers().stream()
                 .filter(p -> !p.getUuid().equals(player.getUuid()))
                 .min((p1, p2) -> Double.compare(p1.squaredDistanceTo(player), p2.squaredDistanceTo(player)))
                 .orElse(null);
 
-        if (closestPlayer != null) {
-            Vec3d direction = new Vec3d(
-                    closestPlayer.getX() - player.getX(),
-                    closestPlayer.getEyeY() - player.getEyeY(),
-                    closestPlayer.getZ() - player.getZ()
+        if (target != null) {
+            Vec3d dir = new Vec3d(
+                    target.getX() - player.getX(),
+                    target.getEyeY() - player.getEyeY(),
+                    target.getZ() - player.getZ()
             ).normalize();
 
-            Vec3d currentLook = player.getRotationVector();
-            Vec3d newLook = currentLook.add(direction.subtract(currentLook).multiply(AIM_SPEED));
-            player.setRotation((float)Math.toDegrees(Math.atan2(newLook.z, newLook.x)) - 90f,
-                               (float)Math.toDegrees(Math.asin(newLook.y)));
+            Vec3d look = player.getRotationVector();
+            Vec3d smoothLook = look.add(dir.subtract(look).multiply(AIM_SPEED));
+            ((EntityAccessor) player).callSetRotation(
+                    (float) Math.toDegrees(Math.atan2(smoothLook.z, smoothLook.x)) - 90f,
+                    (float) Math.toDegrees(Math.asin(smoothLook.y))
+            );
         }
     }
 }
