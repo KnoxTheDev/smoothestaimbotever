@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "id": "modid",
+  "id": "smoothestaimbotever",
   "version": "${version}",
-  "name": "Example Mod",
+  "name": "smoothestaimbotever",
   "description": "smoothest aimbot ever for block game",
   "authors": [
     "knox"
@@ -15,7 +15,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.example.ExampleMod"
+      "com.example.smoothestaimbotever.ExampleMod"
     ]
   },
   "mixins": [

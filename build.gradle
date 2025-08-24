@@ -21,7 +21,7 @@ repositories {
 loom {
 
 	mods {
-		"killaura" {
+		"smoothestaimbotever" {
 			sourceSet sourceSets.main
 		}
 	}
