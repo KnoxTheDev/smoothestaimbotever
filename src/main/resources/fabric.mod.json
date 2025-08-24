@@ -11,15 +11,12 @@
 		"homepage": "https://fabricmc.net/",
 		"sources": "https://github.com/FabricMC/fabric-example-mod"
 	},
-	"license": "CC0-1.0",
+	"license": "LGPL-2.1",
 	"icon": "assets/modid/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
 			"com.example.ExampleMod"
-		],
-		"client": [
-			"com.example.ExampleModClient"
 		]
 	},
 	"mixins": [
