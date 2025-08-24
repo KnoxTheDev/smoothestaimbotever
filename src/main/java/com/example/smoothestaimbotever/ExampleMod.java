@@ -1,10 +1,11 @@
-package com.example;
+package com.example.smoothestaimbotever;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.Vec3d;
+import com.example.smoothestaimbotever.mixin.EntityAccessorMixin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,13 +15,13 @@ public class ExampleMod implements ClientModInitializer {
 
     private static final double SPEED = 0.7;
     private static final double STEP_SIZE = 0.05;
-    private static final double JITTER = 0.0015; // smaller jitter for smoother aim
-    private static final double AIM_SPEED = 0.045; // faster smooth aim per tick
-    private static final long SLEEP_MS = 5; // faster update rate
+    private static final double JITTER = 0.0015;
+    private static final double AIM_SPEED = 0.045;
+    private static final long SLEEP_MS = 5;
 
     @Override
     public void onInitializeClient() {
-        LOGGER.info("Hyper-optimized smooth micro-lock aimbot enabled.");
+        LOGGER.info("smoothest aimbot ever for block game.");
         MinecraftClient client = MinecraftClient.getInstance();
 
         new Thread(() -> {
@@ -60,7 +61,7 @@ public class ExampleMod implements ClientModInitializer {
 
             Vec3d look = player.getRotationVector();
             Vec3d smoothLook = look.add(dir.subtract(look).multiply(AIM_SPEED));
-            ((EntityAccessor) player).callSetRotation(
+            ((EntityAccessorMixin) player).callSetRotation(
                     (float) Math.toDegrees(Math.atan2(smoothLook.z, smoothLook.x)) - 90f,
                     (float) Math.toDegrees(Math.asin(smoothLook.y))
             );

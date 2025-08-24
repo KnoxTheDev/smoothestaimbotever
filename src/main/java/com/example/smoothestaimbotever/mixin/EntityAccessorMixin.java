@@ -5,7 +5,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(Entity.class)
-public interface EntityAccessor {
+public interface EntityAccessorMixin {
     @Invoker("setRotation")
     void callSetRotation(float yaw, float pitch);
 }
