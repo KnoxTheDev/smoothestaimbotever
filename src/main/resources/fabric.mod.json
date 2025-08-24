@@ -15,7 +15,7 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      "com.example.killaura.KillAuraMod"
+      "com.example.smoothestaimbotever.ExampleMod"
     ]
   },
   "mixins": [
