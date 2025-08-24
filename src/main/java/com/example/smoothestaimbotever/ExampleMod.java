@@ -44,9 +44,9 @@ public class ExampleMod implements ClientModInitializer {
     public void onInitializeClient() {
         LOGGER.info("smoothest aimbot ever for block game initialised.");
 
-        // Register /aimbot commands
+        // ✅ Register /aimbot as a real client-side command
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
-            ClientCommandManager.literal("aimbot")
+            dispatcher.register(ClientCommandManager.literal("aimbot")
                 .executes(context -> {
                     listConfig();
                     return 1;
@@ -124,7 +124,8 @@ public class ExampleMod implements ClientModInitializer {
                             config.hitbox = StringArgumentType.getString(context, "value");
                             LOGGER.info("Aimbot hitbox set to " + config.hitbox);
                             return 1;
-                        })));
+                        })))
+            );
         });
 
         // Rotation-only aimbot loop
@@ -185,7 +186,6 @@ public class ExampleMod implements ClientModInitializer {
     private boolean isTargetValid(Entity e) {
         if (!e.isAlive()) return false;
         if (config.targets.equals("player") && !(e instanceof PlayerEntity)) return false;
-        // Add crystal logic if desired
         double distance = client.player.squaredDistanceTo(e);
         if (distance > config.range * config.range) return false;
 
